@@ -51,14 +51,46 @@ class App:
         if event.type == QUIT:
             self._running = False
 
+    def getNewItemPosition(self):
+        newPoint = Point()
+        newPoint.x = randint(1,self.windowSettings.width/self.itemSize -1)
+        newPoint.y = randint(1,self.windowSettings.height/self.itemSize -1)
+        while(self.canCreateItemAtPoint(newPoint) == False):
+            newPoint.x = randint(1,self.windowSettings.width/self.itemSize -1)
+            newPoint.y = randint(1,self.windowSettings.height/self.itemSize -1)
+
+        return newPoint
+
+    def canCreateItemAtPoint(self, point):
+        pointToCheck = Point()
+        pointToCheck.x = point.x *20
+        pointToCheck.y = point.y *20
+
+        for j in range(0,self.itemCount):
+            if self.items[j].getLocation().x == pointToCheck.x and self.items[j].getLocation().y == pointToCheck.y:
+                return False
+
+
+        if self.playerHitItem(pointToCheck):
+            return False
+
+        return True
+
+
+    def playerHitItem(self,point):
+        for i in range(0,self.player.length-1):
+             if self.collisionMgr.collisionDetected(self.player.location[i],point,16):
+                 return True
+
+        return False
+
     def on_loop(self):
         self.player.updatePlayer()
-
-        for i in range(0,self.player.length-1):
-            for j in range(0,self.itemCount):
-                if self.collisionMgr.collisionDetected(self.player.location[i],self.items[j].getLocation(),16):
-                    self.player.increases(self.items[j])
-                    self.items[j].reInit(randint(1,self.windowSettings.width/self.itemSize ),randint(1,self.windowSettings.height/self.itemSize ),randint(1,3))
+        for j in range(0,self.itemCount):
+            if self.playerHitItem(self.items[j].getLocation()):
+                self.player.increases(self.items[j])
+                newLocation = self.getNewItemPosition()
+                self.items[j].reInit(newLocation.x,newLocation.y,randint(1,3))
                     
     
         for i in range(2,self.player.length-1):
@@ -67,7 +99,8 @@ class App:
         
         for j in range(0,self.itemCount):
             if  pygame.time.get_ticks() - self.items[j].initTime > 10000:
-                self.items[j].reInit(randint(1,self.windowSettings.width/self.itemSize - 1),randint(1,self.windowSettings.height/self.itemSize  -1), randint(1,3))
+                newLocation = self.getNewItemPosition()
+                self.items[j].reInit(newLocation.x,newLocation.y, randint(1,3))
 
         pass
 
