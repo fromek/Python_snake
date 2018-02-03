@@ -24,7 +24,13 @@
     <Compile Include="CollisionManager.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DirectionType.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Item.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ItemType.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Player.py">
@@ -42,7 +48,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="snakeImg.png" />
+    <Content Include="Resources\apple1.png" />
+    <Content Include="Resources\bigApple.png" />
+    <Content Include="Resources\poison.png" />
+    <Content Include="Resources\snakeImg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
