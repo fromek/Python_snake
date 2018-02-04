@@ -36,7 +36,7 @@ class App:
 
         self.player = Player(3,self.windowSettings)
         for i in range(0,self.itemCount):
-            self.items.append(Item(randint(1,self.windowSettings.width/self.itemSize - 1),randint(1,self.windowSettings.height/self.itemSize  -1), randint(1,3)))
+            self.items.append(Item(randint(1,self.windowSettings.width/self.itemSize - 1),randint(1,self.windowSettings.height/self.itemSize  -1), randint(1,2)))
 
         
 
@@ -50,6 +50,18 @@ class App:
     def on_event(self, event):
         if event.type == QUIT:
             self._running = False
+
+    def getNewItemType(self):
+        maxVal = 3
+        poisonCount = 0
+        for i in range(0,self.itemCount):
+            if ItemType(self.items[i].itType) == ItemType.poison:
+                poisonCount += 1
+        
+        if poisonCount >= 2:
+            maxVal = 2
+
+        return randint(1,maxVal)
 
     def getNewItemPosition(self):
         newPoint = Point()
@@ -90,7 +102,7 @@ class App:
             if self.playerHitItem(self.items[j].getLocation()):
                 self.player.increases(self.items[j])
                 newLocation = self.getNewItemPosition()
-                self.items[j].reInit(newLocation.x,newLocation.y,randint(1,3))
+                self.items[j].reInit(newLocation.x,newLocation.y,self.getNewItemType())
                     
     
         for i in range(2,self.player.length-1):
@@ -100,7 +112,7 @@ class App:
         for j in range(0,self.itemCount):
             if  pygame.time.get_ticks() - self.items[j].initTime > 10000:
                 newLocation = self.getNewItemPosition()
-                self.items[j].reInit(newLocation.x,newLocation.y, randint(1,3))
+                self.items[j].reInit(newLocation.x,newLocation.y, self.getNewItemType())
 
         pass
 
